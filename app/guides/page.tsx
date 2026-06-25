@@ -10,6 +10,14 @@ const guides = [
     icon: "📋",
     sections: 12,
   },
+  {
+    id: "prompt-composer-advanced",
+    title: "Prompt User Guide — Advanced Users",
+    subtitle: "Research & Knowledge Engineering with the Full Skill Taxonomy",
+    description: "Advanced guide covering the complete 60-skill taxonomy, knowledge engineering pipelines, humanities and quant research architectures, LLM Council synthesis, wiki knowledge bases, and NotebookLM integration.",
+    icon: "⚗️",
+    sections: 12,
+  },
 ];
 
 export default function GuidesPage() {

@@ -70,8 +70,9 @@ export const SEED_NAV: SeedNavSection[] = [
     id: "guides",
     title: "System User Guides",
     items: [
-      { label: "Prompt Composer",           route: "/guides",               icon: "📋" },
-      { label: "Documentation & Tutorials", route: "/wikis?section=system", icon: "📚" },
+      { label: "Prompt Composer",                      route: "/guides",                           icon: "📋" },
+      { label: "Prompt User Guide - Advanced Users",   route: "/guides/prompt-composer-advanced",  icon: "⚗️" },
+      { label: "Documentation & Tutorials",            route: "/wikis?section=system",             icon: "📚" },
     ],
   },
   {
