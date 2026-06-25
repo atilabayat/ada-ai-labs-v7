@@ -26,5 +26,7 @@ execSync("npx prisma db push --skip-generate", {
   stdio: "inherit",
 });
 
-fs.copyFileSync(tmp, src);
-console.log(`[vercel-db] schema-synced db written back to ${src} (${fs.statSync(src).size}b)`);
+// Do NOT copy back — the tmp file is only used to validate the schema.
+// The original prisma/dev.db (with seeded data) is bundled as-is by NFT.
+// Copying back was overwriting the 60-skill binary with Prisma's schema-reset output.
+console.log(`[vercel-db] schema validated on tmp copy; original ${src} (${fs.statSync(src).size}b) unchanged`);
