@@ -18,6 +18,14 @@ const guides = [
     icon: "⚗️",
     sections: 12,
   },
+  {
+    id: "quant-skills",
+    title: "Quant Skills Guide",
+    subtitle: "All 25 Quant Skills — What They Do and How They Layer Together",
+    description: "General guide to all quant skills across the Embedded KB, core Quant, SPY/SPX, and TSLA groups. Covers data infrastructure, regime classification, gamma exposure, liquidity detection, options pricing, trade strategy generation, and governance.",
+    icon: "γ",
+    sections: 12,
+  },
 ];
 
 export default function GuidesPage() {

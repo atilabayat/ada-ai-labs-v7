@@ -56,6 +56,7 @@ export const SEED_NAV: SeedNavSection[] = [
       { label: "Support and Resistance Profiles", route: "/sr-profiles",         icon: "≡" },
       { label: "Dashboards",                      route: "/dashboards",           icon: "▦" },
       { label: "Bloomberg Terminal",              route: "/quant?view=bloomberg", icon: "⊡" },
+      { label: "Quant Skills Guide",              route: "/guides/quant-skills",  icon: "γ" },
     ],
   },
   {
