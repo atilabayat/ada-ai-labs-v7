@@ -1,0 +1,46 @@
+{
+  "name": "ada-ai-labs",
+  "version": "7.3.0",
+  "private": true,
+  "description": "ADA AI Labs — Alpha Data Architects Research & Development Workspace",
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && node scripts/vercel-build-db.mjs && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "smoke": "node scripts/smoke-test.mjs",
+    "e2e": "playwright test",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:setup": "prisma db push && tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.100.1",
+    "@prisma/client": "^5.18.0",
+    "@qdrant/js-client-rest": "^1.18.0",
+    "docx": "^9.7.1",
+    "next": "^16.2.9",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "server-only": "^0.0.1",
+    "voyageai": "^0.3.1",
+    "zustand": "^4.5.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.39",
+    "prisma": "^5.18.0",
+    "tailwindcss": "^3.4.6",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3"
+  }
+}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>a TSLA research portal</title>
+<style>
+  :root {
+    --bg-0:#0a0e1a; --bg-1:#0f1525; --bg-2:#141d33; --bg-3:#1c2742;
+    --line:#1f2b47; --line-strong:#2c3b5e;
+    --ink-0:#eef2fb; --ink-1:#c7d0e4; --ink-2:#8b97b5; --ink-3:#5a6a8c;
+    --accent:#4d8dff; --teal:#2dd4bf; --amber:#f5b748; --rose:#ff5677; --violet:#a78bfa;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg-0); color:var(--ink-1);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; line-height:1.6; }
+  .mono { font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace; }
+  a { color:var(--accent); }
+  h1,h2,h3,h4 { color:var(--ink-0); line-height:1.25; }
+  h2 { border-bottom:1px solid var(--line); padding-bottom:8px; }
+  code { background:var(--bg-3); padding:2px 6px; border-radius:4px; font-family:'SF Mono',ui-monospace,monospace; font-size:0.88em; color:var(--teal); }
+  pre.code { background:var(--bg-2); border:1px solid var(--line); border-radius:8px; padding:14px 16px; overflow:auto; }
+  pre.code code { background:none; color:var(--ink-1); padding:0; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; }
+  th { background:var(--bg-2); color:var(--ink-2); text-transform:uppercase; letter-spacing:0.08em; font-size:10px; text-align:left; padding:8px 10px; border-bottom:1px solid var(--line-strong); }
+  td { padding:8px 10px; border-bottom:1px solid var(--line); }
+  blockquote { border-left:3px solid var(--accent); margin:14px 0; padding:6px 16px; color:var(--ink-2); background:rgba(77,141,255,0.05); border-radius:0 6px 6px 0; }
+  hr { border:none; border-top:1px solid var(--line); margin:20px 0; }
+
+    .top { display:flex; align-items:center; justify-content:space-between; padding:18px 24px;
+      border-bottom:1px solid var(--line); background:var(--bg-1); position:sticky; top:0; z-index:5; }
+    .top h1 { font-size:18px; margin:0; }
+    .top .live { font-size:11px; color:var(--teal); }
+    .top .live::before { content:''; display:inline-block; width:7px; height:7px; border-radius:50%;
+      background:var(--teal); margin-right:6px; box-shadow:0 0 8px var(--teal); animation:blink 1.4s infinite; }
+    @keyframes blink { 50% { opacity:.3; } }
+    .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; padding:22px 24px; }
+    .kpi { background:var(--bg-1); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+    .kpi-label { font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-3); margin-bottom:8px; }
+    .kpi-val { font-size:26px; font-weight:600; color:var(--ink-0); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; padding:0 24px 32px; }
+    .card { background:var(--bg-1); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    .card header { background:var(--bg-2); color:var(--teal); font-size:11px; padding:10px 16px; border-bottom:1px solid var(--line); }
+    .card-body { padding:6px 18px 16px; max-height:420px; overflow:auto; }
+  </style></head>
+<body>
+    <div class="top">
+      <h1>a TSLA research portal</h1>
+      <span class="live mono" id="status">LIVE · <span id="clock"></span></span>
+    </div>
+    <div class="kpis"><div class="kpi"><div class="kpi-label mono">Put Wall</div>
+                 <div class="kpi-val">$380</div></div><div class="kpi"><div class="kpi-label mono">Call Wall</div>
+                 <div class="kpi-val">$420</div></div></div>
+    <div class="grid"><article class="card"><header class="mono">/web-search</header>
+               <div class="card-body"><h2>Web Search · TSLA</h2>
+<ul><li>Tesla beats delivery estimates</li><li>Analysts raise price targets</li></ul>
+<table><tr><th>Metric</th><th>Value</th></tr><tr><td>Spot</td><td>$391.00</td></tr><tr><td>Change</td><td>-6.56%</td></tr></table></div></article><article class="card"><header class="mono">/tsla-putwall</header>
+               <div class="card-body"><h2>TSLA Put Wall</h2>
+<p>Put Wall: $380 Call Wall: $420</p>
+<blockquote>Dealer magnet at 380.</blockquote></div></article></div><script>
+    (function(){
+      var clock=document.getElementById('clock');
+      function tick(){ if(clock) clock.textContent=new Date().toLocaleTimeString(); }
+      tick(); setInterval(tick,1000);
+    })();
+  </script></body></html>

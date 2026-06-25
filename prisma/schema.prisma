@@ -1,0 +1,238 @@
+// ADA AI Labs — data model
+// Default: SQLite (zero-config, file-based, runs with `npm install`).
+// To switch to Postgres (matches the ADGA stack): change `provider` to
+// "postgresql" and set DATABASE_URL to your connection string, then run
+// `npm run db:setup`. All field types below are portable across both.
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  // provider = "postgresql"   // <-- switch target here
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------------------------------
+// Applications (launchable apps shown in /applications + LaunchOverlay)
+// ----------------------------------------------------------------------------
+model App {
+  id        String   @id
+  name      String
+  cat       String
+  icon      String
+  color     String // amber | teal | rose | violet
+  env       String // dev | staging | live
+  url       String
+  type      String // putwall | briefing | compendium | digest | lattice | wiki | artifact | generic
+  desc      String
+
+  // Self-contained interactive artifact captured from the source build.
+  // When present, the launcher renders this HTML in a sandboxed iframe instead
+  // of a hard-coded typed preview. `markdown` is the publishable text portion.
+  html      String? // full HTML document (course/survey/app/dashboard/component)
+  markdown  String? // markdown portion, for "open as wiki" / export
+
+  // Runtime (flattened from AppRuntime)
+  region   String
+  uptime   String
+  latency  String
+  requests String
+  errors   String
+
+  // Build log: JSON-encoded [time, message, level][]
+  log String
+
+  sortOrder Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------------------------------------------------------
+// Wikis (Karpathy-style knowledge layer: /wikis + /wikis/[slug])
+// ----------------------------------------------------------------------------
+model Wiki {
+  slug       String  @id
+  title      String
+  titleEm    String?
+  lede       String
+  banner     String // research | quant | philosophy
+  crumb      String
+  pages      Int
+  updated    String
+  version    String
+  visibility String
+  env        String  @default("dev") // dev | staging | live
+  content    String // HTML body for the reader
+
+  // Card metadata (shown in the /wikis grid)
+  cardDesc  String
+  cardStat1 String
+  cardStat2 String
+  cardStat3 String
+
+  sortOrder Int @default(0)
+
+  sources  WikiSource[]
+  related  WikiRelated[]
+  toc      WikiTocItem[]
+  pageList WikiPage[]
+}
+
+model WikiSource {
+  id        Int    @id @default(autoincrement())
+  wiki      Wiki   @relation(fields: [wikiSlug], references: [slug], onDelete: Cascade)
+  wikiSlug  String
+  title     String
+  meta      String
+  sortOrder Int    @default(0)
+
+  @@index([wikiSlug])
+}
+
+model WikiRelated {
+  id        Int    @id @default(autoincrement())
+  wiki      Wiki   @relation(fields: [wikiSlug], references: [slug], onDelete: Cascade)
+  wikiSlug  String
+  name      String
+  ic        String
+  sortOrder Int    @default(0)
+
+  @@index([wikiSlug])
+}
+
+model WikiTocItem {
+  id        Int     @id @default(autoincrement())
+  wiki      Wiki    @relation(fields: [wikiSlug], references: [slug], onDelete: Cascade)
+  wikiSlug  String
+  anchorId  String
+  name      String
+  sub       Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  @@index([wikiSlug])
+}
+
+model WikiPage {
+  id        Int     @id @default(autoincrement())
+  wiki      Wiki    @relation(fields: [wikiSlug], references: [slug], onDelete: Cascade)
+  wikiSlug  String
+  pageId    String
+  name      String
+  current   Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  @@index([wikiSlug])
+}
+
+// ----------------------------------------------------------------------------
+// Builds (one row per user "Build" — prompt + skill chain + streamed output)
+// ----------------------------------------------------------------------------
+model Build {
+  id     String @id
+  prompt String
+  skills String // JSON: string[] of skill ids
+  env    String // dev | staging | live
+
+  status String // queued | streaming | done | failed | cancelled
+
+  // Final concatenated text output (set on completion)
+  output String @default("")
+
+  // Per-step transcript — JSON array of { skill, label, output, ts } objects
+  events String @default("[]")
+
+  // Optional follow-ups
+  artifactPath    String?
+  promotedAppId   String?
+  promotedWikiSlug String?
+
+  error String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+// ----------------------------------------------------------------------------
+// Skills (composable AI skills shown in the picker + library)
+// ----------------------------------------------------------------------------
+model Skill {
+  id        String @id // matches the leading-slash name e.g. "tsla-putwall"
+  name      String // display name with leading slash, e.g. "/tsla-putwall"
+  cat       String // research | quant | dev | knowledge
+  group     String // display group label
+  desc      String
+  uses      Int    @default(0)
+  ver       String
+  sortOrder Int    @default(0)
+
+  @@index([cat])
+}
+
+// ----------------------------------------------------------------------------
+// Knowledge graph (nodes + undirected edges shown on /knowledge)
+// ----------------------------------------------------------------------------
+model KnowledgeNode {
+  id        String  @id
+  label     String
+  x         Int
+  y         Int
+  radius    Int
+  color     String  // hex
+  fontSize  Int     @default(9)
+  category  String  // Quant | Wiki | Research | Application | Concept
+  highlight Boolean @default(false)
+  sortOrder Int     @default(0)
+}
+
+model KnowledgeEdge {
+  id        Int   @id @default(autoincrement())
+  fromId    String
+  toId      String
+  opacity   Float @default(0.18)
+  sortOrder Int   @default(0)
+
+  @@index([fromId])
+}
+
+// ----------------------------------------------------------------------------
+// Deep Research session log (persists completed sessions + their results)
+// ----------------------------------------------------------------------------
+model ResearchSession {
+  id          String   @id
+  topic       String
+  categories  String   // JSON: string[]
+  status      String   // "finished" | "error"
+  results     String   @default("[]") // JSON: DeepResearchResult[]
+  resultCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// ----------------------------------------------------------------------------
+// Sidebar nav (structure stored, badge values computed at query time)
+// ----------------------------------------------------------------------------
+model NavSection {
+  id        String    @id
+  title     String
+  sortOrder Int       @default(0)
+  items     NavItem[]
+}
+
+model NavItem {
+  id         Int        @id @default(autoincrement())
+  sectionId  String
+  section    NavSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  label      String
+  route      String
+  icon       String
+  badgeKind  String? // default | live | warn — visual style
+  badgeText  String? // literal text, or null = derive dynamically by route
+  sortOrder  Int        @default(0)
+
+  @@index([sectionId])
+}
