@@ -54,7 +54,7 @@ export default function StatusBar() {
       </div>
       <div className="flex-1" />
       <div>route: {pathname}</div>
-      <div>build 0.3.0-beta · ada-ai-labs</div>
+      <div>build 7.3.0 · ada-ai-labs</div>
       <button
         onClick={toggleTheme}
         title={`Switch to ${isLight ? "dark" : "light"} mode`}
